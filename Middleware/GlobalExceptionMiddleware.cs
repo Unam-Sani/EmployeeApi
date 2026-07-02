@@ -30,21 +30,26 @@ public class GlobalExceptionMiddleware
     private static Task HandleExceptionAsync(HttpContext context, Exception ex)
     {
         HttpStatusCode statusCode;
-        string message = ex.Message;
+        string message;
 
         switch (ex)
         {
             case NotFoundException:
                 statusCode = HttpStatusCode.NotFound;
+                message = ex.Message;
                 break;
 
             case BadHttpRequestException:
                 statusCode = HttpStatusCode.BadRequest;
+                message = ex.Message;
                 break;
 
             default:
                 statusCode = HttpStatusCode.InternalServerError;
-                message = "An unexpected error occurred.";
+
+                // ⭐ TEMPORARY FOR DEBUGGING
+                // Show full exception details so Azure reveals the real error
+                message = ex.ToString();
                 break;
         }
 
