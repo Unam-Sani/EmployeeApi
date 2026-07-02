@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using EmployeeApi.Helpers;
 
-
 using System.Text;
 
 
@@ -27,8 +26,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite("Data Source=employee.db"));
+
 
 
 
