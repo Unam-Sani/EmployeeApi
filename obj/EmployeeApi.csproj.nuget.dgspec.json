@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj": {}
+    "c:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj": {
+    "c:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj",
+        "projectUniqueName": "c:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj",
         "projectName": "EmployeeApi",
-        "projectPath": "C:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj",
+        "projectPath": "c:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\EmployeeApi.csproj",
         "packagesPath": "C:\\Users\\Unams\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\obj\\",
+        "outputPath": "c:\\Users\\Unams\\OneDrive\\Desktop\\Work\\Personal\\ASP.NET Projects\\EmployeeApi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
