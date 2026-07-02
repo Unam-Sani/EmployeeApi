@@ -47,8 +47,8 @@ public class GlobalExceptionMiddleware
             default:
                 statusCode = HttpStatusCode.InternalServerError;
 
-                // ⭐ TEMPORARY FOR DEBUGGING
-                // Show full exception details so Azure reveals the real error
+                // TEMPORARY FOR DEBUGGING
+                // Return the actual exception so we can identify the Azure error.
                 message = ex.ToString();
                 break;
         }
