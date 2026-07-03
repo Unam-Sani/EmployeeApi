@@ -15,7 +15,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
-  <!-- Entity Framework Core Providers -->
+  <!-- Entity Framework Core -->
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
@@ -31,14 +31,6 @@
     <Folder Include="Helpers\" />
     <Folder Include="Models\User.cs\" />
     <Folder Include="Services\Interfaces\" />
-  </ItemGroup>
-
-  <!-- SQLite Database Deployment -->
-  <ItemGroup>
-    <None Update="employee.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

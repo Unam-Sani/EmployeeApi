@@ -6,6 +6,7 @@ using EmployeeApi.Data;
 using EmployeeApi.DTOs.Departments;
 using EmployeeApi.DTOs.Employees;
 using EmployeeApi.Exceptions;
+using EmployeeApi.Helpers;
 using EmployeeApi.Mappings;
 using EmployeeApi.Repositories;
 using EmployeeApi.Repositories.Interfaces;
@@ -16,62 +17,68 @@ using EmployeeApi.Validators.Employees;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using EmployeeApi.Helpers;
 
 using System.Text;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-// Database
+// DATABASE
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("Data Source=employee.db"));
+    options.UseSqlite(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
+// CONTROLLERS
 
-
-
-
-// Controllers
 builder.Services.AddControllers();
 
 
-// FluentValidation
+// FLUENT VALIDATION
+
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
 
-// Swagger
+// SWAGGER
+// (Doesn't affect Postman. Safe to leave.)
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-// AutoMapper
+// AUTOMAPPER
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
-// Repositories
+// REPOSITORIES
+
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 
 
-// Services
+// SERVICES
+
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
 
-// Validators
+builder.Services.AddSingleton<JwtTokenGenerator>();
+
+
+// VALIDATORS
+
 builder.Services.AddTransient<IValidator<DepartmentCreateDto>, DepartmentCreateValidator>();
 builder.Services.AddTransient<IValidator<DepartmentUpdateDto>, DepartmentUpdateValidator>();
 
 builder.Services.AddTransient<IValidator<EmployeeCreateDto>, EmployeeCreateValidator>();
 builder.Services.AddTransient<IValidator<EmployeeUpdateDto>, EmployeeUpdateValidator>();
 
-//Register AuthService and JwtTokenGenerator
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddSingleton<JwtTokenGenerator>();
 
 
 // JWT
+
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 
 var jwtKey = jwtSettings["Key"]
@@ -100,23 +107,53 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+
+// CORS
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
+
+
+// BUILD APPLICATION
 
 var app = builder.Build();
 
-app.UseCors("AllowFrontend");
 
-// Middleware
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        var db = services.GetRequiredService<ApplicationDbContext>();
+
+        logger.LogInformation("Applying Entity Framework migrations...");
+
+        db.Database.Migrate();
+
+        logger.LogInformation("Database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while applying database migrations.");
+        throw;
+    }
+}
+// MIDDLEWARE
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseCors("AllowFrontend");
 
 if (app.Environment.IsDevelopment())
 {
@@ -131,7 +168,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-// Endpoints
+// ENDPOINTS
+
 app.MapControllers();
 
 app.Run();
